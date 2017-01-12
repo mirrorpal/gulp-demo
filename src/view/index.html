@@ -3,8 +3,45 @@
 <head>
 <% include _head.html %>
 <title>index</title>
+<style type="text/css">
+.content,.js_show{
+	position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+.content{
+	overflow: hidden;
+}
+.js_show{
+	overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+</style>
 </head>
-<body>
-11111qweqwe
+<body ontouchstart>
+<div class="content">
+	<div class="js_show">
+		<div class="s" style="height: 1000px">12312</div>
+	</div>
+</div>
+<script src="https://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	$(document).on('touchstart',".s",function(){
+	var $page = $(".js_show"),
+		$s = document.querySelector('.s'),
+		winH = $(window).height();
+	if ($s.offsetTop + $s.offsetHeight > $page.scrollTop() + winH) {
+		var st = $s.offsetTop + $s.offsetHeigh - winH + 10;
+		if (st > $s.offsetTop) {
+			st = $s.offsetTop - 10;
+		}
+		$page.scrollTop(st);
+	}		
+	});
+})
+</script>
 </body>
 </html>
