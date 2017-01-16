@@ -9,13 +9,22 @@ var gulp = require('gulp'),
     browserSync = require('browser-sync').create(),
     del = require('del');
 
-gulp.task('styles', function() {
-  return gulp.src('src/css/layout.scss')
+gulp.task('copyCss', function() {
+  return gulp.src(['src/css/**/*.scss','!src/css/common/*.scss'])
     .pipe(sass())
     .pipe(gulp.dest('dist/css'))
     .pipe(rename({suffix: '.min'}))
     .pipe(minifycss())
     .pipe(gulp.dest('dist/css'))
+    .pipe(notify({ message: 'copyCss task complete' }))
+});
+gulp.task('styles',['copyCss'], function() {
+  return gulp.src('src/css/common/layout.scss')
+    .pipe(sass())
+    .pipe(gulp.dest('dist/css/common'))
+    .pipe(rename({suffix: '.min'}))
+    .pipe(minifycss())
+    .pipe(gulp.dest('dist/css/common'))
     .pipe(notify({ message: 'Styles task complete' }))
     .pipe(browserSync.stream());
 });
@@ -46,7 +55,7 @@ gulp.task('serve', ['styles'], function() {
     browserSync.init({
         server: "./dist/view"
     });
-    gulp.watch('src/css/*.scss', ['styles']);
+    gulp.watch('src/css/**/*.scss', ['styles']);
     gulp.watch('src/js/*.js', ['uglify']);
     gulp.watch("src/view/*.html",['ejs']).on('change', browserSync.reload);
 });
